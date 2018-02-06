@@ -7,6 +7,7 @@ use Cake\ORM\Behavior;
 use Cake\ORM\Entity;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
+use Cake\ORM\Query;
 use Cake\Utility\Inflector;
 use RuntimeException;
 
@@ -226,6 +227,24 @@ class TagBehavior extends Behavior
         }
 
         return $result;
+    }
+
+    /**
+     * Method: findTag
+     *
+     * Custom finder to match tag
+     *
+     * @param Query $query Query
+     * @param array $options With tag passed
+     * @return \Cake\ORM\Query
+     */
+    public function findTag(Query $query, array $options)
+    {
+        $query->matching('Tags', function ($q) use ($options) {
+            return $q->where(['Tags.slug' => $options['tag']]);
+        });
+
+        return $query;
     }
 
     /**
