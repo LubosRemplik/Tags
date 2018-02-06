@@ -14,5 +14,6 @@ class Tag extends Entity
     public $accessible = [
         '*' => false,
         'label' => true,
+        'color' => true,
     ];
 }

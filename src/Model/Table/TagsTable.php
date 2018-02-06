@@ -15,7 +15,7 @@ class TagsTable extends Table
      */
     public function initialize(array $config)
     {
-        $this->table('tags_tags');
+        $this->table('tags');
         $this->displayField('label');
         $this->addBehavior('Timestamp');
         if (Plugin::loaded('Muffin/Slug')) {

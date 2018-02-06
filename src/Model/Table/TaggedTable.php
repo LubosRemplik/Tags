@@ -14,7 +14,7 @@ class TaggedTable extends Table
      */
     public function initialize(array $config)
     {
-        $this->table('tags_tagged');
+        $this->table('tagged');
         $this->addBehavior('Timestamp');
     }
 }

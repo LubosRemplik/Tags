@@ -24,8 +24,8 @@ class TagBehavior extends Behavior
         'tagsAlias' => 'Tags',
         'tagsAssoc' => [
             'className' => 'Muffin/Tags.Tags',
-            'joinTable' => 'tags_tagged',
-            'foreignKey' => 'fk_id',
+            'joinTable' => 'tagged',
+            'foreignKey' => 'foreign_key',
             'targetForeignKey' => 'tag_id',
             'propertyName' => 'tags',
         ],
@@ -43,7 +43,7 @@ class TagBehavior extends Behavior
         'implementedMethods' => [
             'normalizeTags' => 'normalizeTags',
         ],
-        'fkTableField' => 'fk_table'
+        'fkTableField' => 'foreign_table'
     ];
 
     /**
@@ -153,7 +153,6 @@ class TagBehavior extends Behavior
      * on both the `Tags` and the tagged entities.
      *
      * @return void
-     * @throws \RuntimeException If configured counter cache field does not exist in table.
      */
     public function attachCounters()
     {
@@ -175,16 +174,6 @@ class TagBehavior extends Behavior
 
         if ($config['taggedCounter'] === false) {
             return;
-        }
-
-        foreach ($config['taggedCounter'] as $field => $o) {
-            if (!$this->_table->hasField($field)) {
-                throw new RuntimeException(sprintf(
-                    'Field "%s" does not exist in table "%s"',
-                    $field,
-                    $this->_table->table()
-                ));
-            }
         }
 
         if (!$counterCache->config($taggedAlias)) {
