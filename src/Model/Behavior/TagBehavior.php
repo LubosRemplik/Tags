@@ -248,6 +248,42 @@ class TagBehavior extends Behavior
     }
 
     /**
+     * Method: findArchived
+     *
+     * Find archived offers
+     *
+     * @param \Cake\ORM\Query $query Query
+     * @param array $options Options
+     * @return \Cake\ORM\Query
+     */
+    public function findArchived(Query $query, array $options)
+    {
+        $query->matching('Tags', function ($q) {
+            return $q->where(['Tags.tag_key' => 'archive']);
+        });
+
+        return $query;
+    }
+
+    /**
+     * Method: findUnarchived
+     *
+     * Find unarchived offers
+     *
+     * @param \Cake\ORM\Query $query Query
+     * @param array $options Options
+     * @return \Cake\ORM\Query
+     */
+    public function findUnarchived(Query $query, array $options)
+    {
+        $query->notMatching('Tags', function ($q) {
+            return $q->where(['Tags.tag_key' => 'archive']);
+        });
+
+        return $query;
+    }
+
+    /**
      * Generates the unique tag key.
      *
      * @param string $tag Tag label.
