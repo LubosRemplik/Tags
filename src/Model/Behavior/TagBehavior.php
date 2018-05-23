@@ -108,16 +108,22 @@ class TagBehavior extends Behavior
         $table = $this->_table;
         $tableAlias = $this->_table->getAlias();
 
+        // 3.5 compatibility
+        $hasAssociation = 'hasAssociation';
+        if (!method_exists($table, 'hasAssociation')) {
+            $hasAssociation = 'association';
+        }
+
         $assocConditions = [$taggedAlias . '.' . $this->getConfig('fkTableField') => $table->getTable()];
 
-        if (!$table->hasAssociation($taggedAlias)) {
+        if (!$table->{$hasAssociation}($taggedAlias)) {
             $table->hasMany($taggedAlias, $taggedAssoc + [
                 'foreignKey' => $tagsAssoc['foreignKey'],
                 'conditions' => $assocConditions,
             ]);
         }
 
-        if (!$table->hasAssociation($tagsAlias)) {
+        if (!$table->{$hasAssociation}($tagsAlias)) {
             $table->belongsToMany($tagsAlias, $tagsAssoc + [
                 'through' => $table->{$taggedAlias}->getTarget(),
                 'conditions' => $assocConditions
@@ -218,7 +224,7 @@ class TagBehavior extends Behavior
         }
 
         $tagsTable = $this->_table->{$this->getConfig('tagsAlias')};
-        $pk = $tagsTable->getProperty();
+        $pk = $tagsTable->getPrimaryKey();
         $df = $tagsTable->getDisplayField();
 
         foreach ($tags as $tag) {
@@ -323,9 +329,11 @@ class TagBehavior extends Behavior
                 $tagsTable->aliasField($tagsTable->getPrimaryKey())
             ])
             ->first();
+
         if (!empty($result)) {
             return $result->id;
         }
+
         return null;
     }
 
