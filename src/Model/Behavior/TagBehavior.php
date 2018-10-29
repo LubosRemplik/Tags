@@ -87,7 +87,7 @@ class TagBehavior extends Behavior
             $data[$field] = $this->normalizeTags($data[$field]);
         }
         if (isset($data[$field]) && empty($data[$field])) {
-            unset($data[$field]);
+            $data[$field] = [];
         }
     }
 
