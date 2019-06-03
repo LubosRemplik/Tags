@@ -266,6 +266,30 @@ class TagBehavior extends Behavior
     }
 
     /**
+     * Method: findTag
+     *
+     * Custom finder to match tags
+     *
+     * @param Query $query
+     * @param array $options
+     * @return void
+     */
+    public function findTags(Query $query, array $options)
+    {
+        if (!empty($options['tags'])) {
+            $query
+                ->group(sprintf('%s.%s', $this->_table->alias(), $this->_table->getPrimaryKey()))
+                ->matching('Tags', function ($q) use ($options) {
+                return $q->where(function ($exp) use ($options) {
+                    return $exp->in('Tags.slug', $options['tags']);
+                });
+            });
+        }
+
+        return $query;
+    }
+
+    /**
      * Method: findArchived
      *
      * Find archived offers
